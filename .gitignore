@@ -1,0 +1,36 @@
+# Secrets et variables d'environnement
+.env
+*.env
+*.secret
+*.key
+*.pem
+
+# Données des services
+server-infra/data/
+server-infra/nfs/data/
+server-infra/samba/data/
+
+# Volumes Docker
+**/docker-data/
+**/volumes/
+
+# Logs
+*.log
+logs/
+
+# Fichiers temporaires
+*.tmp
+*.swp
+*~
+
+# Système
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+
+# Fichiers de sauvegarde
+*.bak
+*.backup

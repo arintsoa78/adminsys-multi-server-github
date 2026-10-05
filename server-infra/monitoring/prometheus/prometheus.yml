@@ -1,0 +1,29 @@
+global:
+  scrape_interval: 15s
+  evaluation_interval: 15s
+
+scrape_configs:
+
+  # Prometheus lui-même
+  - job_name: "prometheus"
+    static_configs:
+      - targets:
+          - "prometheus:9090"
+
+  # SERVER-INFRA
+  - job_name: "server-infra"
+    static_configs:
+      - targets:
+          - "192.168.56.130:9100"
+
+  # BACKEND
+  - job_name: "backend"
+    static_configs:
+      - targets:
+          - "192.168.56.129:9100"
+
+  # CLIENT
+  - job_name: "client"
+    static_configs:
+      - targets:
+          - "192.168.56.134:9100"

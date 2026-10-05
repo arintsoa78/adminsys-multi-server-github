@@ -1,0 +1,82 @@
+services:
+  nfs:
+    image: itsthenetwork/nfs-server-alpine:latest
+    container_name: adminsys-nfs
+    privileged: true
+    environment:
+      SHARED_DIRECTORY: /srv/nfs
+    volumes:
+      - ./data/nfs:/srv/nfs
+    ports:
+      - "2049:2049"
+      - "111:111"
+      - "111:111/udp"
+    restart: unless-stopped
+
+  samba:
+    image: dperson/samba:latest
+    container_name: adminsys-samba
+    environment:
+      TZ: Indian/Antananarivo
+    volumes:
+      - ./data/samba:/srv/samba
+    ports:
+      - "139:139"
+      - "445:445"
+    command: >
+      -s "public;/srv/samba/public;yes;no;yes;all"
+    restart: unless-stopped
+
+  grafana:
+    image: grafana/grafana-oss
+    container_name: grafana
+    restart: unless-stopped
+    dns:
+      - 8.8.8.8
+      - 1.1.1.1
+    ports:
+      - "3000:3000"
+    volumes:
+      - grafana-storage:/var/lib/grafana
+
+  prometheus:
+    image: prom/prometheus:latest
+    container_name: prometheus
+    restart: unless-stopped
+    volumes:
+      - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
+      - prometheus-storage:/prometheus
+    ports:
+      - "9090:9090"
+
+  node_exporter:
+    image: prom/node-exporter:latest
+    container_name: node_exporter
+    restart: unless-stopped
+    network_mode: host
+    pid: host
+    volumes:
+      - /:/host:ro,rslave
+    command:
+      - '--path.rootfs=/host'
+
+  cadvisor:
+    image: gcr.io/cadvisor/cadvisor:latest
+    container_name: cadvisor
+    restart: unless-stopped
+    privileged: true
+    ports:
+      - "8080:8080"
+    volumes:
+      - /:/rootfs:ro
+      - /var/run:/var/run:ro
+      - /sys:/sys:ro
+      - /var/lib/docker/:/var/lib/docker:ro
+      - /dev/disk/:/dev/disk:ro
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+    devices:
+      - /dev/kmsg
+
+volumes:
+  grafana-storage:
+  prometheus-storage:

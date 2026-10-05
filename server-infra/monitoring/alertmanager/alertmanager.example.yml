@@ -1,0 +1,20 @@
+global:
+  resolve_timeout: 5m
+
+route:
+  receiver: "email-alerts"
+  group_by: ["instance", "severity"]
+  group_wait: 30s
+  group_interval: 5m
+  repeat_interval: 4h
+
+receivers:
+  - name: "email-alerts"
+    email_configs:
+      - to: "it-support@example.com"
+        from: "alertmanager@example.com"
+        smarthost: "smtp.example.com:465"
+        auth_username: "alertmanager@example.com"
+        auth_password: "CHANGE_ME"
+        require_tls: false
+        send_resolved: true

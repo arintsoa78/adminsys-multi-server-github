@@ -1,0 +1,15 @@
+$TTL 86400
+
+@   IN  SOA server-infra.adminsys.local. admin.adminsys.local. (
+        1
+        604800
+        86400
+        2419200
+        86400
+)
+
+@       IN  NS  server-infra.adminsys.local.
+
+server     IN  A   192.168.56.130
+backend    IN  A   192.168.56.129
+client     IN  A   192.168.56.134
